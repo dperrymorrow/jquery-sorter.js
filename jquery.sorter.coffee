@@ -1,22 +1,15 @@
 $ = jQuery
 
-$.fn.sorter = (dataKey, direction) ->
- 	direction = "ASC"  if typeof direction == "undefined"
- 	group = this
- 	container = group.first().parent()
- 	vals = []
- 	group.each ->
- 		vals.push $(this).data(dataKey)
+$.fn.sorter = (dataKey, direction, customMethod) ->
+  direction ||= "ASC"
+  container = this.first().parent()
+  vals = []
+  this.each -> vals.push $(this).data dataKey if $(this).data dataKey
+    
+  if customMethod then vals = vals.sort customMethod else vals = vals.sort()
+  vals = vals.reverse()  if direction == "DESC"
   
-	vals = vals.sort()
-	vals = vals.reverse()  if direction == "DESC"
-	i = 0
-  
-	while i < vals.length
-		val = vals[i]
-		item = container.find("*[data-#{dataKey}=\"#{val}\"]")
-		console.log item
-		console.log "*[data-#{dataKey}=\"#{val}\"]"
-		container.prepend item
-		i++
-	return group
+  for val in vals
+    item = container.find "*[data-#{dataKey}=\"#{val}\"]"
+    container.prepend item
+  this

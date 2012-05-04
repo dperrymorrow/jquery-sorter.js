@@ -1,30 +1,29 @@
 (function() {
-  var $, i, item, val, vals;
+  var $;
   $ = jQuery;
-  $.fn.sorter = function(dataKey, direction) {
-    var container, group, vals;
-    if (typeof direction === "undefined") {
-      direction = "ASC";
-    }
-    group = this;
-    container = group.first().parent();
+  $.fn.sorter = function(dataKey, direction, customMethod) {
+    var container, item, val, vals, _i, _len;
+    direction || (direction = "ASC");
+    container = this.first().parent();
     vals = [];
-    return group.each(function() {
-      return vals.push($(this).data(dataKey));
+    this.each(function() {
+      if ($(this).data(dataKey)) {
+        return vals.push($(this).data(dataKey));
+      }
     });
+    if (customMethod) {
+      vals = vals.sort(customMethod);
+    } else {
+      vals = vals.sort();
+    }
+    if (direction === "DESC") {
+      vals = vals.reverse();
+    }
+    for (_i = 0, _len = vals.length; _i < _len; _i++) {
+      val = vals[_i];
+      item = container.find("*[data-" + dataKey + "=\"" + val + "\"]");
+      container.prepend(item);
+    }
+    return this;
   };
-  vals = vals.sort();
-  if (direction === "DESC") {
-    vals = vals.reverse();
-  }
-  i = 0;
-  while (i < vals.length) {
-    val = vals[i];
-    item = container.find("*[data-" + dataKey + "=\"" + val + "\"]");
-    console.log(item);
-    console.log("*[data-" + dataKey + "=\"" + val + "\"]");
-    container.prepend(item);
-    i++;
-  }
-  return group;
 }).call(this);
