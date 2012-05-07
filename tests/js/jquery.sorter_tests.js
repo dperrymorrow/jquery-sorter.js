@@ -10,7 +10,7 @@ $(document).ready(function(){
   
   test("sorting asc and desc on strings", 2, function() {
     $('#table tr').sorter( 'str_key' )
-    equal( $('#table tr').first().data('str_key'), 'foo')
+    equal( $('#table tr').first().data('str_key'), 'Foo')
     $('#table tr').sorter( 'str_key', 'DESC')
     equal( $('#table tr').first().data('str_key'), 'arg')
   })
